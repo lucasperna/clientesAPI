@@ -1,6 +1,52 @@
-<div *ngFor="let cliente of clientes">
-  Id: {{cliente.id}}
-  <br>
-  Nome: {{cliente.nome}}
-  <hr>
+<div class="form-inline">
+  <div class="form-group mb-2">
+    <label class="mr-2">Filtro:</label>  <input type="text" class="form-control mr-2" placeholder="Buscar" [(ngModel)]="filtroLista">
+  </div>
 </div>
+<h3>
+  Filtro: {{filtroLista}}
+</h3>
+<table class="table table-striped">
+  <thead class="thead-dark">
+    <tr>
+      <th>#</th>
+      <th>Nome</th>
+      <th>Data de Nascm.</th>
+      <th>Sexo</th>
+      <th>CEP</th>
+      <th>Endereço</th>
+      <th>Número</th>
+      <th>Complemento</th>
+      <th>Bairro</th>
+      <th>Estado</th>
+      <th>Cidade</th>
+      <th>Opções</th>
+    </tr>
+  </thead>
+  <tbody *ngIf="clientes && clientes.length">
+    <tr  *ngFor="let cliente of clientesFiltrados">
+      <td>{{cliente.id}}</td>
+      <td>{{cliente.nome | uppercase}}</td>
+      <td>{{cliente.dataNascimento}}</td>
+      <td>{{cliente.sexo}}</td>
+      <td>{{cliente.cep}}</td>
+      <td>{{cliente.endereco}}</td>
+      <td>{{cliente.numero}}</td>
+      <td>{{cliente.complemento}}</td>
+      <td>{{cliente.bairro}}</td>
+      <td>{{cliente.estado}}</td>
+      <td>{{cliente.cidade}}</td>
+      <td>
+        <button class="btn btn-success">Buscar</button>
+        <button class="btn btn-danger">Excluir</button>
+      </td>
+    </tr>
+  </tbody>
+  <tfoot *ngIf="!clientes.length">
+    <tr>
+      <td colspan="12" class="text-center">
+        <h4>Nenhum Cliente encontrado.</h4>
+      </td>
+    </tr>
+  </tfoot>
+</table>

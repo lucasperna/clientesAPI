@@ -8,9 +8,27 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ClientesComponent implements OnInit {
 
-  clientes: any ;
+  _filtroLista: string;
+  clientesFiltrados: any = [];
+  clientes: any = [] ;
 
   constructor(private http: HttpClient) { }
+
+  get filtroLista(): string{
+    return this._filtroLista;
+  }
+
+  set filtroLista(value: string){
+    this._filtroLista = value;
+    this.clientesFiltrados = this.filtroLista ?  this.filtrarCliente(this.filtroLista) : this.clientes;
+  }
+
+  filtrarCliente(filtrarPor: string): any {
+    filtrarPor = filtrarPor.toLocaleLowerCase();
+    return this.clientes.filter(
+      cliente => cliente.nome.toLocaleLowerCase().indexOf(filtrarPor) !== -1
+    );
+  }
 
   ngOnInit() {
     this.getClientes();

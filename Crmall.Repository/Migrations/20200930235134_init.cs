@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Crmallback.API.Migrations
+namespace Crmall.Repository.Migrations
 {
     public partial class init : Migration
     {
@@ -13,7 +14,7 @@ namespace Crmallback.API.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Nome = table.Column<string>(nullable: true),
-                    DataNascimento = table.Column<string>(nullable: true),
+                    DataNascimento = table.Column<DateTime>(nullable: false),
                     Sexo = table.Column<string>(nullable: true),
                     CEP = table.Column<string>(nullable: true),
                     Endereco = table.Column<string>(nullable: true),

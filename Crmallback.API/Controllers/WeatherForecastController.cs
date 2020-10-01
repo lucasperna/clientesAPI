@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Crmallback.API.Data;
-using Crmallback.API.Model;
+using Crmall.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,9 +14,9 @@ namespace Crmallback.API.Controllers
     [Route("api/[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-        public DataContext _context { get; }
+        public CrmallContext _context { get; }
 
-        public WeatherForecastController(DataContext context)
+        public WeatherForecastController(CrmallContext context)
         {
             _context = context;
 
