@@ -27,7 +27,7 @@
     <tr  *ngFor="let cliente of clientesFiltrados">
       <td>{{cliente.id}}</td>
       <td>{{cliente.nome | uppercase}}</td>
-      <td>{{cliente.dataNascimento}}</td>
+      <td>{{cliente.dataNascimento | DateTimeFormatPipe}}</td>
       <td>{{cliente.sexo}}</td>
       <td>{{cliente.cep}}</td>
       <td>{{cliente.endereco}}</td>
@@ -37,8 +37,14 @@
       <td>{{cliente.estado}}</td>
       <td>{{cliente.cidade}}</td>
       <td>
-        <button class="btn btn-success">Buscar</button>
-        <button class="btn btn-danger">Excluir</button>
+        <div class="btn-group">
+          <button class="btn btn-sm btn-primary" tooltip="Editar" (click)="openModal(template)">
+            <i class="fa fa-edit"></i>
+          </button>
+          <button class="btn btn-sm btn-danger" tooltip="Excluir">
+            <i class="fa fa-eraser"></i>
+          </button>
+        </div>
       </td>
     </tr>
   </tbody>
@@ -50,3 +56,16 @@
     </tr>
   </tfoot>
 </table>
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Modal</h4>
+    <button type="button" class="close pull-right" 
+    aria-label="Close" (click)="modalRef.hide()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  This is a modal.
+</div>
+</ng-template>

@@ -1,5 +1,7 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { Cliente } from '../_models/Cliente';
+import { ClienteService } from '../_services/cliente.service';
 
 @Component({
   selector: 'app-clientes',
@@ -9,10 +11,14 @@ import { Component, OnInit } from '@angular/core';
 export class ClientesComponent implements OnInit {
 
   _filtroLista: string;
-  clientesFiltrados: any = [];
-  clientes: any = [] ;
+  clientesFiltrados: Cliente[];
+  clientes: Cliente[];
+  modalRef: BsModalRef;
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private clienteService: ClienteService,
+    private modalService: BsModalService
+    ) { }
 
   get filtroLista(): string{
     return this._filtroLista;
@@ -23,7 +29,11 @@ export class ClientesComponent implements OnInit {
     this.clientesFiltrados = this.filtroLista ?  this.filtrarCliente(this.filtroLista) : this.clientes;
   }
 
-  filtrarCliente(filtrarPor: string): any {
+  openModal(template: TemplateRef<any>){
+    this.modalRef = this.modalService.show(template);
+  }
+
+  filtrarCliente(filtrarPor: string): Cliente[] {
     filtrarPor = filtrarPor.toLocaleLowerCase();
     return this.clientes.filter(
       cliente => cliente.nome.toLocaleLowerCase().indexOf(filtrarPor) !== -1
@@ -35,11 +45,12 @@ export class ClientesComponent implements OnInit {
   }
 
   getClientes(){
-    this.clientes = this.http.get('http://localhost:5000/api/WeatherForecast')
+    this.clienteService.getAllClientes()
     .subscribe(
-      response => {
-        this.clientes = response;
-        console.log(response);
+      (_clientes: Cliente[]) => {
+        this.clientes = _clientes;
+        this.clientesFiltrados = this.clientes;
+        console.log(_clientes);
       }, error => {
         console.log(error);
       }

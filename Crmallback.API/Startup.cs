@@ -31,7 +31,7 @@ namespace Crmallback.API
                 x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection"))
             );
             services.AddControllers();
-
+            services.AddScoped<ICrmallRepository, CrmallRepository>();
             services.AddCors();
         }
 

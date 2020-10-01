@@ -44,12 +44,14 @@ namespace Crmall.Repository.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Nome")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Numero")
+                    b.Property<int?>("Numero")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Sexo")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Crmall.Repository.Migrations
 {
     [DbContext(typeof(CrmallContext))]
-    [Migration("20200930235134_init")]
+    [Migration("20201001013946_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,12 +46,14 @@ namespace Crmall.Repository.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Nome")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Numero")
+                    b.Property<int?>("Numero")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Sexo")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
