@@ -78,7 +78,7 @@ namespace Crmallback.API.Controllers
             return BadRequest();
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, Cliente model)
         {
             try
@@ -102,7 +102,7 @@ namespace Crmallback.API.Controllers
             return BadRequest();
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             try

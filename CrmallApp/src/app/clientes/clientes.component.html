@@ -1,6 +1,11 @@
-<div class="form-inline">
-  <div class="form-group mb-2">
-    <label class="mr-2">Filtro:</label>  <input type="text" class="form-control mr-2" placeholder="Buscar" [(ngModel)]="filtroLista">
+<div class="d-flex">
+  <div class="form-inline mr-auto">
+    <div class="form-group mb-2">
+      <label class="mr-2">Filtro:</label>  <input type="text" class="form-control mr-2" placeholder="Buscar" [(ngModel)]="filtroLista">
+    </div>
+  </div>
+  <div>
+    <button class="btn btn-outline-primary" (click)="novoCliente(template)"><i class="fa fa-plus-circle">&nbsp; Novo Cliente</i></button>
   </div>
 </div>
 <h3>
@@ -38,17 +43,17 @@
       <td>{{cliente.cidade}}</td>
       <td>
         <div class="btn-group">
-          <button class="btn btn-sm btn-primary" tooltip="Editar" (click)="openModal(template)">
+          <button class="btn btn-sm btn-primary" tooltip="Editar" (click)="editarCliente(cliente, template)">
             <i class="fa fa-edit"></i>
           </button>
-          <button class="btn btn-sm btn-danger" tooltip="Excluir">
+          <button class="btn btn-sm btn-danger" tooltip="Excluir" (click)="excluirCliente(cliente, confirm)">
             <i class="fa fa-eraser"></i>
           </button>
         </div>
       </td>
     </tr>
   </tbody>
-  <tfoot *ngIf="!clientes.length">
+  <tfoot *ngIf="clientes && !clientes.length">
     <tr>
       <td colspan="12" class="text-center">
         <h4>Nenhum Cliente encontrado.</h4>
@@ -57,15 +62,118 @@
   </tfoot>
 </table>
 
-<ng-template #template>
-  <div class="modal-header">
-    <h4 class="modal-title pull-left">Modal</h4>
-    <button type="button" class="close pull-right" 
-    aria-label="Close" (click)="modalRef.hide()">
-    <span aria-hidden="true">&times;</span>
-  </button>
+<div bsModal #template="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="dialog-sizes-name1" class="modal-title pull-left">Large modal</h4>
+        <button type="button" class="close pull-right" (click)="template.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="registerForm" >
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label>Nome</label>
+              <input type="text" class="form-control"
+              [ngClass]= "{'is-invalid': registerForm.get('nome').errors && registerForm.get('nome').touched}"
+              formControlName="nome">
+              <div class="invalid-feedback">
+                O nome é obrigatório.
+              </div>
+            </div>
+            <div class="form-group col-md-3">
+              <label>Data de Nasciento</label>
+              <input type="text" class="form-control" 
+              bsDatepicker
+              [ngClass]= "{'is-invalid': registerForm.get('dataNascimento').errors && registerForm.get('dataNascimento').touched}"
+              formControlName="dataNascimento" >
+              <div class="invalid-feedback">
+                A data de nascimento é obrigatório.
+              </div>
+            </div>
+            <div class="form-group col-md-3">
+              <label>Sexo</label>
+              <input type="text" class="form-control" 
+              [ngClass]= "{'is-invalid': registerForm.get('sexo').errors && registerForm.get('sexo').touched}"
+              formControlName="sexo">
+              <div class="invalid-feedback">
+                O sexo é obrigatório.
+              </div>
+            </div>
+          </div> 
+          
+          <div class="form-row">
+            <div class="form-group col-md-3">
+              <label>Cep</label>
+              <input type="text" class="form-control" formControlName="cep" >
+            </div>
+            <div class="form-group col-md-6">
+              <label>Endereço</label>
+              <input type="text" class="form-control" formControlName="endereco" >
+            </div>
+            <div class="form-group col-md-3">
+              <label>Número</label>
+              <input type="text" class="form-control" formControlName="numero" >
+            </div>
+          </div>  
+          
+          <div class="form-row">
+            <div class="form-group col-md-2">
+              <label>Complemento</label>
+              <input type="text" class="form-control" formControlName="complemento">
+            </div>
+            <div class="form-group col-md-3">
+              <label>Bairro</label>
+              <input type="text" class="form-control" formControlName="bairro">
+            </div>
+            <div class="form-group col-md-3">
+              <label>Estado</label>
+              <input type="text" class="form-control" formControlName="estado">
+            </div>
+            <div class="form-group col-md-4">
+              <label>Cidade</label>
+              <input type="text" class="form-control" formControlName="cidade">
+            </div>
+          </div> 
+          
+        </form>
+      </div>
+      <div class="modal-footer d-flex">
+        <button class="btn btn-secondary" (click)="template.hide()">
+          Fechar
+        </button>
+        <button class="btn btn-primary ml-auto" [disabled]="!registerForm.valid" (click)="salvarAlteracao(template)">
+          Salvar Alterações
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
-<div class="modal-body">
-  This is a modal.
+
+<div bsModal #confirm="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name1">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title pull-left">
+          Excluir Cliente
+        </h4>
+        <button type="button" class="close pull-right" (click)="confirm.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>{{bodyDeletarCliente}}</p>
+      </div>
+      <div class="modal-footer btn-group d-flex">
+        <button type="button" class="btn btn-outline-primary" (click)="confirm.hide()">
+          CENCELAR
+        </button>
+        <button type="button" class="btn btn-outline-danger" (click)="confirmeDelete(confirm)">
+          DELETAR
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
-</ng-template>
