@@ -8,6 +8,9 @@ import { Cliente } from '../_models/Cliente';
 import { ClienteService } from '../_services/cliente.service';
 import { templateJitUrl } from '@angular/compiler';
 import { ToastrService } from 'ngx-toastr';
+import { createPipe } from '@angular/compiler/src/core';
+import { ApiService } from '../_services/api/api.service';
+import { Api } from '../_models/Api';
 defineLocale('pt-br', ptBrLocale);
 
 @Component({
@@ -22,6 +25,7 @@ export class ClientesComponent implements OnInit {
   clientesFiltrados: Cliente[];
   clientes: Cliente[];
   cliente: Cliente;
+  api: Api;
   registerForm: FormGroup;
   modoSalvar = 'post';
   bodyDeletarCliente = '';
@@ -29,6 +33,7 @@ export class ClientesComponent implements OnInit {
 
   constructor(
     private clienteService: ClienteService,
+    private apiService: ApiService,
     private modalService: BsModalService,
     private fb: FormBuilder,
     private localeService: BsLocaleService,
@@ -90,6 +95,7 @@ export class ClientesComponent implements OnInit {
     if (this.registerForm.valid) {
       if (this.modoSalvar === 'post') {
         this.cliente = Object.assign({}, this.registerForm.value);
+        this.cliente.numero = +this.cliente.numero;
         this.clienteService.postCliente(this.cliente)
         .subscribe(
           (novoCliente: Cliente) => {
@@ -153,6 +159,26 @@ export class ClientesComponent implements OnInit {
         this.toastr.error(`Erro ao carregar clientes: ${error}`);
       }
     );
+  }
+
+  callAPI(){
+    if (this.registerForm.get('cep').value && this.registerForm.get('cep').value.length === 8)
+    {
+      this.apiService.getApi(this.registerForm.get('cep').value)
+      .subscribe(
+        (_api: any) => {
+          this.api = _api;
+          this.registerForm.patchValue({
+            'endereco': this.api.logradouro,
+            'bairro': this.api.bairro,
+            'estado': this.api.uf,
+            'cidade': this.api.localidade
+          });
+        }, error => {
+          this.registerForm.patchValue({'cep': ''});
+          this.toastr.error(`Erro ao carregar API.`);
+      });
+    }
   }
 
 }

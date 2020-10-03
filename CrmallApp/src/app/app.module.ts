@@ -9,14 +9,16 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { AppRoutingModule } from './app-routing.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxMaskModule, IConfig } from 'ngx-mask';
 
 import { ClienteService } from './_services/cliente.service';
+import { ApiService } from './_services/api/api.service';
+
+import { DateTimeFormatPipePipe } from './_helps/DateTimeFormatPipe.pipe';
 
 import { AppComponent } from './app.component';
 import { ClientesComponent } from './clientes/clientes.component';
 import { NavComponent } from './nav/nav.component';
-
-import { DateTimeFormatPipePipe } from './_helps/DateTimeFormatPipe.pipe';
 import { ContatoComponent } from './contato/contato.component';
 import { BarraTituloComponent } from './_share/barra-titulo/barra-titulo.component';
 
@@ -41,13 +43,15 @@ import { BarraTituloComponent } from './_share/barra-titulo/barra-titulo.compone
     }),
     TooltipModule.forRoot(),
     ModalModule.forRoot(),
+    NgxMaskModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule
   ],
   providers: [
-    ClienteService
+    ClienteService,
+    ApiService
   ],
   bootstrap: [AppComponent]
 })
