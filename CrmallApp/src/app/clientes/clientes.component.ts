@@ -7,6 +7,7 @@ import { ptBrLocale } from 'ngx-bootstrap/locale';
 import { Cliente } from '../_models/Cliente';
 import { ClienteService } from '../_services/cliente.service';
 import { templateJitUrl } from '@angular/compiler';
+import { ToastrService } from 'ngx-toastr';
 defineLocale('pt-br', ptBrLocale);
 
 @Component({
@@ -16,6 +17,7 @@ defineLocale('pt-br', ptBrLocale);
 })
 export class ClientesComponent implements OnInit {
 
+  title = 'Clientes';
   _filtroLista: string;
   clientesFiltrados: Cliente[];
   clientes: Cliente[];
@@ -23,12 +25,14 @@ export class ClientesComponent implements OnInit {
   registerForm: FormGroup;
   modoSalvar = 'post';
   bodyDeletarCliente = '';
+  dataNascimento: string;
 
   constructor(
     private clienteService: ClienteService,
     private modalService: BsModalService,
     private fb: FormBuilder,
-    private localeService: BsLocaleService
+    private localeService: BsLocaleService,
+    private toastr: ToastrService
     ) {
       this.localeService.use('pt-br');
     }
@@ -92,8 +96,9 @@ export class ClientesComponent implements OnInit {
             console.log(novoCliente);
             template.hide();
             this.getClientes();
+            this.toastr.success('Adicionado com Sucesso');
           }, error => {
-            console.log(error);
+            this.toastr.error(`Erro ao inserir: ${error}`);
           }
         );
       }
@@ -105,8 +110,9 @@ export class ClientesComponent implements OnInit {
             console.log(novoCliente);
             template.hide();
             this.getClientes();
+            this.toastr.success('Editado com Sucesso');
           }, error => {
-            console.log(error);
+            this.toastr.error(`Erro ao editar: ${error}`);
           }
         );
       }
@@ -124,9 +130,9 @@ export class ClientesComponent implements OnInit {
       () => {
         template.hide();
         this.getClientes();
-        // this.toastr.success('Deletado com Sucesso');
+        this.toastr.success('Deletado com Sucesso');
       }, error => {
-        // this.toastr.error('Erro ao tentar Deletar');
+        this.toastr.error('Erro! Não foi possível excluir cliente.');
         console.log(error);
       }
     );
@@ -143,9 +149,8 @@ export class ClientesComponent implements OnInit {
       (_clientes: Cliente[]) => {
         this.clientes = _clientes;
         this.clientesFiltrados = this.clientes;
-        console.log(_clientes);
       }, error => {
-        console.log(error);
+        this.toastr.error(`Erro ao carregar clientes: ${error}`);
       }
     );
   }

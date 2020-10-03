@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { AppRoutingModule } from './app-routing.module';
@@ -16,19 +17,28 @@ import { ClientesComponent } from './clientes/clientes.component';
 import { NavComponent } from './nav/nav.component';
 
 import { DateTimeFormatPipePipe } from './_helps/DateTimeFormatPipe.pipe';
+import { ContatoComponent } from './contato/contato.component';
+import { BarraTituloComponent } from './_share/barra-titulo/barra-titulo.component';
 
 @NgModule({
   declarations: [
     AppComponent,
       ClientesComponent,
       NavComponent,
-      DateTimeFormatPipePipe
+      DateTimeFormatPipePipe,
+      BarraTituloComponent,
+      ContatoComponent
    ],
   imports: [
     BrowserModule,
     BsDropdownModule.forRoot(),
     BsDatepickerModule.forRoot(),
     BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      timeOut: 10000,
+      positionClass: 'toast-bottom-right',
+      preventDuplicates: true,
+    }),
     TooltipModule.forRoot(),
     ModalModule.forRoot(),
     AppRoutingModule,
